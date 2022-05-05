@@ -1,0 +1,89 @@
+.cont {
+    display: flex;
+    margin: 20px auto;
+    width: 1000px;
+    min-height: 600px;
+    background-color: rgb(170, 255, 192);
+    box-shadow: 0 0 3px;
+    text-align: center;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.td-center {
+    text-align: center;
+}
+td {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    margin: 0;
+}
+td:first-child {
+    border-left: 0;
+}
+th {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    margin: 0;
+}
+th:first-child {
+    border-left: 0;
+}
+
+.option-button:hover {
+    cursor: pointer;
+    color: rgb(30, 85, 28);
+}
+
+.cont-pignation {
+    display: flex;
+}
+.prev-next {
+    margin: 0 10px 10px;
+}
+.prev-next:hover {
+    cursor: pointer;
+}
+
+form {
+    width: 300px;
+    margin: auto;
+    background-color: rgb(147, 255, 176);
+    border: 1px solid black;
+    box-shadow: 0 0 5px;
+}
+label {
+    display: block;
+    text-align: start;
+    margin: 20px;
+    font-size: 1.2rem;
+}
+input {
+    left: 90px;
+}
+.add-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color: rgb(25, 25, 119);
+    font-weight: bolder;
+    font-size: 1.8rem;
+}
+
+.add {
+    display: inline-block;
+    padding: 5px;
+    margin: 20px 0 20px 0;
+    font-size: 1.8rem;
+    font-weight: bolder;
+    background-color: rgb(147, 255, 176);
+    border: 1px solid black;
+    box-shadow: 0 0 5px;
+    cursor: pointer;
+}
+
+form a {
+    display: block;
+}

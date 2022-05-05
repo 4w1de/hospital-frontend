@@ -1,0 +1,46 @@
+.cont-header {
+    height: 100px;
+    background-color: rgb(118, 255, 118);
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+}
+nav {
+    display: flex;
+    margin: auto;
+}
+nav div {
+    padding: 5px;
+    font-size: 1.8rem;
+    font-weight: bolder;
+    margin-right: 15px;
+    cursor: pointer;
+}
+nav div:last-child {
+    margin-right: 0;
+}
+nav div:hover {
+    font-size: 1.9rem;
+    box-shadow: 0 0 5px rgb(97, 19, 9);
+}
+
+.user-info {
+    position: absolute;
+    right: 50px;
+    top: 45px;
+    font-size: 1.2rem;
+    font-weight: bolder;
+    display: flex;
+    cursor: pointer;
+}
+.user-info:hover {
+    color: rgb(37, 30, 104);
+}
+
+.cont-footer {
+    height: 100px;
+    margin-top: 200px;
+    background-color: rgb(94, 94, 94);
+    text-align: center;
+    line-height: 100px;
+    color: white;
+}
