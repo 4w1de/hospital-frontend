@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { TITLE_DEPARTMENT } from '../../common/constans/titleHeaderTable';
 import { DEPARTMENTS_URL } from '../../common/constans/urls';
+import socket from '../../utils/socketIO';
 
 const UpdateDepartment = (props) => {
     document.title = 'Departments';
@@ -45,6 +46,7 @@ const UpdateDepartment = (props) => {
             )
             .then((response) => {
                 alert('Department changed');
+                socket.emit('depart');
                 navigate('/departments');
             });
     };

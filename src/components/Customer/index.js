@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { CUSTOMER_URL } from '../../common/constans/urls';
 import { TITLE_CUSTOMER } from '../../common/constans/titleHeaderTable';
+import socket from '../../utils/socketIO';
 
 const Customer = (props) => {
     document.title = 'Customer';
@@ -30,8 +31,16 @@ const Customer = (props) => {
             .then((res) => {
                 setCustomers(res.data.customer);
                 setTotal(res.data.total);
+                setPage(1);
             });
     }, [page]);
+
+    useEffect(() => {
+        socket.on('custList', (data) => {
+            setCustomers(data.customer);
+            setTotal(data.total);
+        });
+    }, [socket]);
 
     const nextPage = () => {
         let np = page + 1;
@@ -53,6 +62,7 @@ const Customer = (props) => {
                 })
                 .then(() => {
                     alert('Customer deleted');
+                    socket.emit('cust');
                 });
             await setPage(page + 1);
             setPage(1);

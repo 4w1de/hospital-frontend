@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { TITLE_DEPARTMENT } from '../../common/constans/titleHeaderTable';
 import { DEPARTMENTS_URL } from '../../common/constans/urls';
+import socket from '../../utils/socketIO';
 
 const AddDepartment = (props) => {
     document.title = 'Departments';
@@ -31,6 +32,7 @@ const AddDepartment = (props) => {
             )
             .then((response) => {
                 alert('Department added');
+                socket.emit('depart');
                 navigate('/departments');
             });
     };

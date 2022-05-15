@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { TITLE_EMPLOYEE } from '../../common/constans/titleHeaderTable';
 import { EMPLOYEE_URL, DEPARTMENTS_URL } from '../../common/constans/urls';
+import socket from '../../utils/socketIO';
 
 const UpdateEmployee = (props) => {
     document.title = 'Employee';
@@ -56,6 +57,7 @@ const UpdateEmployee = (props) => {
             )
             .then((response) => {
                 alert('Employee changed');
+                socket.emit('empl');
                 navigate('/employee');
             });
     };
