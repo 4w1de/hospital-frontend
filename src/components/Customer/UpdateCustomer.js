@@ -17,11 +17,13 @@ const UpdateCustomer = (props) => {
     let [address, setAddress] = useState('');
     const navigate = useNavigate();
 
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
+
     useEffect(() => {
         axios
-            .get(`${CUSTOMER_URL}${id}`, {
-                headers: { Authorization: localStorage.getItem('token') },
-            })
+            .get(`${CUSTOMER_URL}${id}`, headers)
             .then((response) => {
                 return response;
             })

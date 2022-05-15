@@ -8,22 +8,26 @@ import { useNavigate } from 'react-router-dom';
 
 import { APPOINTMENT_URL } from '../../common/constans/urls';
 import { TITLE_APPOINTMENT } from '../../common/constans/titleHeaderTable';
-import { getAll } from '../../store/actions/appointment';
 
 const Appointment = (props) => {
     document.title = 'Appointment';
     let [page, setPage] = useState(1);
+    let [appointments, setAppointments] = useState([]);
+    let [total, setTotal] = useState(0);
     const navigate = useNavigate();
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
     useEffect(() => {
-        props.getAllAppointment(`${APPOINTMENT_URL}?page=${page}`);
+        axios.get(`${APPOINTMENT_URL}?page=${page}`).then((res) => {
+            setAppointments(res.data.appointment);
+            setTotal(res.data.total);
+        });
     }, [page]);
 
     const nextPage = () => {
         let np = page + 1;
-        if (np <= Math.ceil(props.appointment.data.total / 5)) {
+        if (np <= Math.ceil(total / 5)) {
             setPage(page + 1);
         }
     };
@@ -46,7 +50,6 @@ const Appointment = (props) => {
             setPage(1);
         }
     };
-
     return (
         <div className="cont">
             <div>
@@ -84,10 +87,8 @@ const Appointment = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.appointment.data &&
-                        props.appointment.data.appointment &&
-                        props.appointment.data.appointment.length
-                            ? props.appointment.data.appointment.map((a) => {
+                        {appointments.length
+                            ? appointments.map((a) => {
                                   return (
                                       <tr key={a.id}>
                                           <td className="td-center">
@@ -147,15 +148,8 @@ const Appointment = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        appointment: state.appointment,
         users: state.users,
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAllAppointment: (url) => dispatch(getAll(url)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Appointment);
+export default connect(mapStateToProps, null)(Appointment);

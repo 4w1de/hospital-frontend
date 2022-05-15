@@ -8,28 +8,31 @@ import { useNavigate } from 'react-router-dom';
 
 import { EMPLOYEE_URL } from '../../common/constans/urls';
 import { TITLE_EMPLOYEE } from '../../common/constans/titleHeaderTable';
-import { getAll } from '../../store/actions/employee';
 
 const Employee = (props) => {
     document.title = 'Employee';
     let [del, setDel] = useState(false);
+    let [employee, setEmployee] = useState([]);
+
     const navigate = useNavigate();
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
+
     useEffect(() => {
-        props.getAllEmployee(EMPLOYEE_URL);
+        axios.get(EMPLOYEE_URL).then((res) => {
+            setEmployee(res.data);
+        });
     }, [del]);
 
     const deleteById = async (id) => {
         if (window.confirm('Delete this employee?')) {
-            axios
-                .delete(`${EMPLOYEE_URL}${id}`, {
-                    headers: { Authorization: localStorage.getItem('token') },
-                })
-                .then(() => {
-                    alert('Employee deleted');
-                });
+            axios.delete(`${EMPLOYEE_URL}${id}`, headers).then(() => {
+                alert('Employee deleted');
+            });
             setDel(del ? false : true);
         }
     };
@@ -68,8 +71,8 @@ const Employee = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.employee.data && props.employee.data.length
-                            ? props.employee.data.map((e) => {
+                        {employee.length
+                            ? employee.map((e) => {
                                   return (
                                       <tr key={e.id}>
                                           <td className="td-center">
@@ -114,15 +117,8 @@ const Employee = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        employee: state.employee,
         users: state.users,
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAllEmployee: (url) => dispatch(getAll(url)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Employee);
+export default connect(mapStateToProps, null)(Employee);

@@ -8,23 +8,34 @@ import { useNavigate } from 'react-router-dom';
 
 import { CUSTOMER_URL } from '../../common/constans/urls';
 import { TITLE_CUSTOMER } from '../../common/constans/titleHeaderTable';
-import { getAll } from '../../store/actions/customer';
 
 const Customer = (props) => {
     document.title = 'Customer';
     let [page, setPage] = useState(1);
+    let [customers, setCustomers] = useState([]);
+    let [total, setTotal] = useState(0);
+
     const navigate = useNavigate();
     const SIZE = 5;
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
+
     useEffect(() => {
-        props.getAllCustomer(`${CUSTOMER_URL}?page=${page}&size=${SIZE}`);
+        axios
+            .get(`${CUSTOMER_URL}?page=${page}&size=${SIZE}`, headers)
+            .then((res) => {
+                setCustomers(res.data.customer);
+                setTotal(res.data.total);
+            });
     }, [page]);
 
     const nextPage = () => {
         let np = page + 1;
-        if (np <= Math.ceil(props.customer.data.total / SIZE)) {
+        if (np <= Math.ceil(total / SIZE)) {
             setPage(page + 1);
         }
     };
@@ -81,10 +92,8 @@ const Customer = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.customer.data &&
-                        props.customer.data.customer &&
-                        props.customer.data.customer.length
-                            ? props.customer.data.customer.map((c) => {
+                        {customers.length
+                            ? customers.map((c) => {
                                   return (
                                       <tr key={c.id}>
                                           <td className="td-center">
@@ -137,15 +146,8 @@ const Customer = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        customer: state.customer,
         users: state.users,
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAllCustomer: (url) => dispatch(getAll(url)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Customer);
+export default connect(mapStateToProps, null)(Customer);

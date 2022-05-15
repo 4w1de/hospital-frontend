@@ -15,11 +15,13 @@ const UpdateDepartment = (props) => {
     let [address, setAddress] = useState('');
     const navigate = useNavigate();
 
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
+
     useEffect(() => {
         axios
-            .get(`${DEPARTMENTS_URL}${id}`, {
-                headers: { Authorization: localStorage.getItem('token') },
-            })
+            .get(`${DEPARTMENTS_URL}${id}`, headers)
             .then((response) => {
                 return response;
             })

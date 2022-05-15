@@ -14,6 +14,10 @@ const AddDepartment = (props) => {
     let [address, setAddress] = useState('');
     const navigate = useNavigate();
 
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
+
     const handleSubmit = () => {
         axios
             .post(
@@ -23,9 +27,7 @@ const AddDepartment = (props) => {
                     name,
                     address,
                 },
-                {
-                    headers: { Authorization: localStorage.getItem('token') },
-                },
+                headers,
             )
             .then((response) => {
                 alert('Department added');
