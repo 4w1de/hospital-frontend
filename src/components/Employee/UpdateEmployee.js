@@ -1,14 +1,12 @@
 import '../styles.css';
 
 import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import { AiFillRightCircle } from 'react-icons/ai';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { TITLE_EMPLOYEE } from '../../common/constans/titleHeaderTable';
 import { EMPLOYEE_URL, DEPARTMENTS_URL } from '../../common/constans/urls';
-import { getAll } from '../../store/actions/departments';
 
 const UpdateEmployee = (props) => {
     document.title = 'Employee';
@@ -18,14 +16,19 @@ const UpdateEmployee = (props) => {
     let [phone, setPhone] = useState('');
     let [address, setAddress] = useState('');
     let [departmentId, setDepartmentId] = useState(0);
+    let [departments, setDepartments] = useState([]);
     const navigate = useNavigate();
 
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
+
     useEffect(() => {
-        props.getAllDepartments(DEPARTMENTS_URL);
+        axios.get(DEPARTMENTS_URL).then((res) => {
+            setDepartments(res.data);
+        });
         axios
-            .get(`${EMPLOYEE_URL}${id}`, {
-                headers: { Authorization: localStorage.getItem('token') },
-            })
+            .get(`${EMPLOYEE_URL}${id}`, headers)
             .then((response) => {
                 return response;
             })
@@ -49,9 +52,7 @@ const UpdateEmployee = (props) => {
                     address,
                     departmentId,
                 },
-                {
-                    headers: { Authorization: localStorage.getItem('token') },
-                },
+                headers,
             )
             .then((response) => {
                 alert('Employee changed');
@@ -106,8 +107,8 @@ const UpdateEmployee = (props) => {
                         <option value={0} disabled>
                             Select department
                         </option>
-                        {props.departments.data && props.departments.data.length
-                            ? props.departments.data.map((d) => {
+                        {departments.length
+                            ? departments.map((d) => {
                                   return (
                                       <option key={d.id} value={d.id}>
                                           {d.name}
@@ -126,16 +127,4 @@ const UpdateEmployee = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        departments: state.departments,
-    };
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAllDepartments: (url) => dispatch(getAll(url)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateEmployee);
+export default UpdateEmployee;

@@ -1,7 +1,6 @@
 import '../styles.css';
 
 import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import { AiFillRightCircle } from 'react-icons/ai';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -12,8 +11,6 @@ import {
     EMPLOYEE_URL,
     CUSTOMER_URL,
 } from '../../common/constans/urls';
-import { getAll as getCustomer } from '../../store/actions/customer';
-import { getAll as getEmployee } from '../../store/actions/employee';
 
 const AddAppointment = (props) => {
     document.title = 'Appointment';
@@ -24,10 +21,20 @@ const AddAppointment = (props) => {
     let [end, setEnd] = useState('');
     let [customerId, setCustomerId] = useState(0);
     let [employeeId, setEmployeeId] = useState(0);
+    let [customers, setCustomers] = useState([]);
+    let [employee, setEmployee] = useState([]);
+
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
 
     useEffect(() => {
-        props.getAllCustomer(CUSTOMER_URL);
-        props.getAllEmployee(EMPLOYEE_URL);
+        axios.get(CUSTOMER_URL, headers).then((res) => {
+            setCustomers(res.data.customer);
+        });
+        axios.get(EMPLOYEE_URL, headers).then((res) => {
+            setEmployee(res.data);
+        });
     }, []);
 
     const handleSubmit = () => {
@@ -99,10 +106,8 @@ const AddAppointment = (props) => {
                         <option value={0} disabled>
                             Select customer
                         </option>
-                        {props.customer.data &&
-                        props.customer.data.customer &&
-                        props.customer.data.customer.length
-                            ? props.customer.data.customer.map((c) => {
+                        {customers.length
+                            ? customers.map((c) => {
                                   return (
                                       <option key={c.id} value={c.id}>
                                           {c.name}
@@ -120,8 +125,8 @@ const AddAppointment = (props) => {
                         <option value={0} disabled>
                             Select employee
                         </option>
-                        {props.employee.data && props.employee.data.length
-                            ? props.employee.data.map((e) => {
+                        {employee.length
+                            ? employee.map((e) => {
                                   return (
                                       <option key={e.id} value={e.id}>
                                           {e.name}
@@ -140,18 +145,4 @@ const AddAppointment = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        customer: state.customer,
-        employee: state.employee,
-    };
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAllCustomer: (url) => dispatch(getCustomer(url)),
-        getAllEmployee: (url) => dispatch(getEmployee(url)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddAppointment);
+export default AddAppointment;

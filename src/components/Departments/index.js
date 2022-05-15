@@ -8,28 +8,31 @@ import { useNavigate } from 'react-router-dom';
 
 import { DEPARTMENTS_URL } from '../../common/constans/urls';
 import { TITLE_DEPARTMENT } from '../../common/constans/titleHeaderTable';
-import { getAll } from '../../store/actions/departments';
 
 const Departments = (props) => {
     document.title = 'Departments';
     let [del, setDel] = useState(false);
+    let [departments, setDepartments] = useState([]);
+
     const navigate = useNavigate();
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
+    const headers = {
+        headers: { Authorization: localStorage.getItem('token') },
+    };
+
     useEffect(() => {
-        props.getAllDepartments(DEPARTMENTS_URL);
+        axios.get(DEPARTMENTS_URL).then((res) => {
+            setDepartments(res.data);
+        });
     }, [del]);
 
     const deleteById = async (id) => {
         if (window.confirm('Delete this department?')) {
-            axios
-                .delete(`${DEPARTMENTS_URL}${id}`, {
-                    headers: { Authorization: localStorage.getItem('token') },
-                })
-                .then(() => {
-                    alert('Department deleted');
-                });
+            axios.delete(`${DEPARTMENTS_URL}${id}`, headers).then(() => {
+                alert('Department deleted');
+            });
             setDel(del ? false : true);
         }
     };
@@ -63,8 +66,8 @@ const Departments = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.departments.data && props.departments.data.length
-                            ? props.departments.data.map((d) => {
+                        {departments.length
+                            ? departments.map((d) => {
                                   return (
                                       <tr key={d.id}>
                                           <td>{d.name}</td>
@@ -102,15 +105,8 @@ const Departments = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        departments: state.departments,
         users: state.users,
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAllDepartments: (url) => dispatch(getAll(url)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Departments);
+export default connect(mapStateToProps, null)(Departments);
