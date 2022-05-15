@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { DEPARTMENTS_URL } from '../../common/constans/urls';
 import { TITLE_DEPARTMENT } from '../../common/constans/titleHeaderTable';
+import socket from '../../utils/socketIO';
 
 const Departments = (props) => {
     document.title = 'Departments';
@@ -28,9 +29,16 @@ const Departments = (props) => {
         });
     }, [del]);
 
+    useEffect(() => {
+        socket.on('departList', (data) => {
+            setDepartments(data);
+        });
+    }, [socket]);
+
     const deleteById = async (id) => {
         if (window.confirm('Delete this department?')) {
             axios.delete(`${DEPARTMENTS_URL}${id}`, headers).then(() => {
+                socket.emit('depart');
                 alert('Department deleted');
             });
             setDel(del ? false : true);

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { APPOINTMENT_URL } from '../../common/constans/urls';
 import { TITLE_APPOINTMENT } from '../../common/constans/titleHeaderTable';
+import socket from '../../utils/socketIO';
 
 const Appointment = (props) => {
     document.title = 'Appointment';
@@ -24,6 +25,14 @@ const Appointment = (props) => {
             setTotal(res.data.total);
         });
     }, [page]);
+
+    useEffect(() => {
+        socket.on('appointList', (data) => {
+            setAppointments(data.appointment);
+            setTotal(data.total);
+            setPage(1);
+        });
+    }, [socket, page]);
 
     const nextPage = () => {
         let np = page + 1;
@@ -45,6 +54,7 @@ const Appointment = (props) => {
                 })
                 .then(() => {
                     alert('Appointment deleted');
+                    socket.emit('appoint');
                 });
             await setPage(page + 1);
             setPage(1);

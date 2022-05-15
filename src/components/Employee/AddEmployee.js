@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { TITLE_EMPLOYEE } from '../../common/constans/titleHeaderTable';
 import { EMPLOYEE_URL, DEPARTMENTS_URL } from '../../common/constans/urls';
+import socket from '../../utils/socketIO';
 
 const AddEmployee = (props) => {
     document.title = 'Employee';
@@ -46,6 +47,7 @@ const AddEmployee = (props) => {
             )
             .then((response) => {
                 alert('Employee added');
+                socket.emit('empl');
                 navigate('/employee');
             });
     };

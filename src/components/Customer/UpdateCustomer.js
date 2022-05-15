@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { TITLE_CUSTOMER } from '../../common/constans/titleHeaderTable';
 import { CUSTOMER_URL } from '../../common/constans/urls';
+import socket from '../../utils/socketIO';
 
 const UpdateCustomer = (props) => {
     document.title = 'Customer';
@@ -51,6 +52,7 @@ const UpdateCustomer = (props) => {
             )
             .then((response) => {
                 alert('Customer changed');
+                socket.emit('cust');
                 navigate('/customer');
             });
     };

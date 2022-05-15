@@ -11,6 +11,7 @@ import {
     EMPLOYEE_URL,
     CUSTOMER_URL,
 } from '../../common/constans/urls';
+import socket from '../../utils/socketIO';
 
 const AddAppointment = (props) => {
     document.title = 'Appointment';
@@ -55,6 +56,7 @@ const AddAppointment = (props) => {
             )
             .then((response) => {
                 alert('Appointment added');
+                socket.emit('appoint');
                 navigate('/appointment');
             });
     };

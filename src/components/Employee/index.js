@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { EMPLOYEE_URL } from '../../common/constans/urls';
 import { TITLE_EMPLOYEE } from '../../common/constans/titleHeaderTable';
+import socket from '../../utils/socketIO';
 
 const Employee = (props) => {
     document.title = 'Employee';
@@ -28,10 +29,17 @@ const Employee = (props) => {
         });
     }, [del]);
 
+    useEffect(() => {
+        socket.on('emplList', (data) => {
+            setEmployee(data);
+        });
+    }, [socket]);
+
     const deleteById = async (id) => {
         if (window.confirm('Delete this employee?')) {
             axios.delete(`${EMPLOYEE_URL}${id}`, headers).then(() => {
                 alert('Employee deleted');
+                socket.emit('empl');
             });
             setDel(del ? false : true);
         }
