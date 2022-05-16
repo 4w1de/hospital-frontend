@@ -12,6 +12,7 @@ import {
     CUSTOMER_URL,
 } from '../../common/constans/urls';
 import socket from '../../utils/socketIO';
+import headers from '../../utils/header';
 
 const UpdateAppointment = (props) => {
     document.title = 'Appointment';
@@ -25,10 +26,6 @@ const UpdateAppointment = (props) => {
     let [employeeId, setEmployeeId] = useState(0);
     let [customers, setCustomers] = useState([]);
     let [employee, setEmployee] = useState([]);
-
-    const headers = {
-        headers: { Authorization: localStorage.getItem('token') },
-    };
 
     useEffect(() => {
         axios.get(CUSTOMER_URL, headers).then((res) => {

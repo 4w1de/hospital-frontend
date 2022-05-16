@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { CUSTOMER_URL } from '../../common/constans/urls';
 import { TITLE_CUSTOMER } from '../../common/constans/titleHeaderTable';
 import socket from '../../utils/socketIO';
+import headers from '../../utils/header';
 
 const Customer = (props) => {
     document.title = 'Customer';
@@ -21,24 +22,23 @@ const Customer = (props) => {
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
-    const headers = {
-        headers: { Authorization: localStorage.getItem('token') },
-    };
-
-    useEffect(() => {
+    const getAll = () => {
         axios
             .get(`${CUSTOMER_URL}?page=${page}&size=${SIZE}`, headers)
             .then((res) => {
                 setCustomers(res.data.customer);
                 setTotal(res.data.total);
-                setPage(1);
             });
+    };
+
+    useEffect(() => {
+        getAll();
     }, [page]);
 
     useEffect(() => {
-        socket.on('custList', (data) => {
-            setCustomers(data.customer);
-            setTotal(data.total);
+        socket.on('custList', () => {
+            setPage(page);
+            getAll();
         });
     }, [socket]);
 

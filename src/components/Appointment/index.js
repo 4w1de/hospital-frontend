@@ -19,20 +19,23 @@ const Appointment = (props) => {
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
-    useEffect(() => {
+    const getAll = () => {
         axios.get(`${APPOINTMENT_URL}?page=${page}`).then((res) => {
             setAppointments(res.data.appointment);
             setTotal(res.data.total);
         });
+    };
+
+    useEffect(() => {
+        getAll();
     }, [page]);
 
     useEffect(() => {
-        socket.on('appointList', (data) => {
-            setAppointments(data.appointment);
-            setTotal(data.total);
-            setPage(1);
+        socket.on('appointList', () => {
+            setPage(page);
+            getAll();
         });
-    }, [socket, page]);
+    }, [socket]);
 
     const nextPage = () => {
         let np = page + 1;

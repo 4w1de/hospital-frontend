@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { TITLE_CUSTOMER } from '../../common/constans/titleHeaderTable';
 import { CUSTOMER_URL } from '../../common/constans/urls';
 import socket from '../../utils/socketIO';
+import headers from '../../utils/header';
 
 const AddCustomer = (props) => {
     document.title = 'Customer';
@@ -28,9 +29,7 @@ const AddCustomer = (props) => {
                     phone,
                     address,
                 },
-                {
-                    headers: { Authorization: localStorage.getItem('token') },
-                },
+                headers,
             )
             .then((response) => {
                 alert('Customer added');

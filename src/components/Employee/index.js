@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { EMPLOYEE_URL } from '../../common/constans/urls';
 import { TITLE_EMPLOYEE } from '../../common/constans/titleHeaderTable';
 import socket from '../../utils/socketIO';
+import headers from '../../utils/header';
 
 const Employee = (props) => {
     document.title = 'Employee';
@@ -19,19 +20,19 @@ const Employee = (props) => {
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
-    const headers = {
-        headers: { Authorization: localStorage.getItem('token') },
-    };
-
-    useEffect(() => {
+    const getAll = () => {
         axios.get(EMPLOYEE_URL).then((res) => {
             setEmployee(res.data);
         });
+    };
+
+    useEffect(() => {
+        getAll();
     }, [del]);
 
     useEffect(() => {
-        socket.on('emplList', (data) => {
-            setEmployee(data);
+        socket.on('emplList', () => {
+            getAll();
         });
     }, [socket]);
 
