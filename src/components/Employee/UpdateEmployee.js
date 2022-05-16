@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { TITLE_EMPLOYEE } from '../../common/constans/titleHeaderTable';
 import { EMPLOYEE_URL, DEPARTMENTS_URL } from '../../common/constans/urls';
 import socket from '../../utils/socketIO';
+import headers from '../../utils/header';
 
 const UpdateEmployee = (props) => {
     document.title = 'Employee';
@@ -19,10 +20,6 @@ const UpdateEmployee = (props) => {
     let [departmentId, setDepartmentId] = useState(0);
     let [departments, setDepartments] = useState([]);
     const navigate = useNavigate();
-
-    const headers = {
-        headers: { Authorization: localStorage.getItem('token') },
-    };
 
     useEffect(() => {
         axios.get(DEPARTMENTS_URL).then((res) => {

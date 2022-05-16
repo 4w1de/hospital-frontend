@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { TITLE_DEPARTMENT } from '../../common/constans/titleHeaderTable';
 import { DEPARTMENTS_URL } from '../../common/constans/urls';
 import socket from '../../utils/socketIO';
+import headers from '../../utils/header';
 
 const UpdateDepartment = (props) => {
     document.title = 'Departments';
@@ -15,10 +16,6 @@ const UpdateDepartment = (props) => {
     let [name, setName] = useState('');
     let [address, setAddress] = useState('');
     const navigate = useNavigate();
-
-    const headers = {
-        headers: { Authorization: localStorage.getItem('token') },
-    };
 
     useEffect(() => {
         axios

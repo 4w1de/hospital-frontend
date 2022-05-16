@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { DEPARTMENTS_URL } from '../../common/constans/urls';
 import { TITLE_DEPARTMENT } from '../../common/constans/titleHeaderTable';
 import socket from '../../utils/socketIO';
+import headers from '../../utils/header';
 
 const Departments = (props) => {
     document.title = 'Departments';
@@ -19,19 +20,19 @@ const Departments = (props) => {
     const { isAuth } = props.users;
     const { role } = props.users.user;
 
-    const headers = {
-        headers: { Authorization: localStorage.getItem('token') },
-    };
-
-    useEffect(() => {
+    const getAll = () => {
         axios.get(DEPARTMENTS_URL).then((res) => {
             setDepartments(res.data);
         });
+    };
+
+    useEffect(() => {
+        getAll();
     }, [del]);
 
     useEffect(() => {
-        socket.on('departList', (data) => {
-            setDepartments(data);
+        socket.on('departList', () => {
+            getAll();
         });
     }, [socket]);
 
